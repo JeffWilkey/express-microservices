@@ -1,10 +1,21 @@
+import mongoose from "mongoose";
 import request from "supertest";
 import express from "express";
+
 import api from "../api";
+import config from "../../../config";
 
 const app = express();
 app.use(express.json());
 app.use("/", api);
+
+beforeEach(async () => {
+  await mongoose.connect(config.DB_URL!);
+});
+
+afterEach(async () => {
+  await mongoose.connection.close();
+});
 
 describe("URL Shortener Microservice API", () => {
   test("POST / should return a response with correct properties", async () => {

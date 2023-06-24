@@ -5,22 +5,24 @@ import { ShortenedUrl, IShortenedUrl } from "./model";
 export const getUrl = async (query: any) => {
   const result = await ShortenedUrl.findOne(query);
 
-  console.log(result);
-
-  return result;
+  return result?.serialize();
 };
 
-export const createUrl = async (data: UrlShortenerReq) => {
+export const createUrl = async (
+  data: UrlShortenerReq
+): Promise<IShortenedUrl> => {
   const existingUrl = await ShortenedUrl.findOne({
     $or: [{ originalUrl: data.url }, {}],
   }).sort({ shortUrl: -1 });
 
-  if (existingUrl?.originalUrl === data.url) return existingUrl;
+  if (existingUrl?.originalUrl === data.url) return existingUrl.serialize();
 
-  return ShortenedUrl.create({
+  const shortenedUrl = await ShortenedUrl.create({
     originalUrl: data.url,
     shortUrl: existingUrl?.shortUrl ? existingUrl.shortUrl + 1 : 1,
   });
+
+  return shortenedUrl.serialize();
 };
 
 export const dnsLookup = async (hostname: string) => {

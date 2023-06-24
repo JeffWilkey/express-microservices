@@ -11,7 +11,7 @@ api.post("/", async (req, res) => {
     await dnsLookup(data.url);
 
     // Create
-    const newUrl = createUrl(data);
+    const newUrl = await createUrl(data);
 
     res.status(201).json(newUrl);
   } catch (error) {
@@ -25,7 +25,7 @@ api.post("/", async (req, res) => {
 });
 api.get("/:id", async (req, res) => {
   try {
-    const url = getUrl({ shortUrl: parseInt(req.params.id) });
+    const url = await getUrl({ shortUrl: parseInt(req.params.id) });
 
     if (url) res.status(200).json(url);
     else res.status(404).json();

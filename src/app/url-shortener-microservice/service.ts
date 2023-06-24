@@ -1,17 +1,26 @@
 import dns from "dns";
-import { ShortenedUrlQuery, UrlShortenerReq } from "./types";
-import { findOneShortenedUrl, createShortenedUrl } from "./data-access";
+import { UrlShortenerReq } from "./types";
+import { ShortenedUrl, IShortenedUrl } from "./model";
 
-export const getUrl = (query: ShortenedUrlQuery) => {
-  return findOneShortenedUrl(query);
+export const getUrl = async (query: any) => {
+  const result = await ShortenedUrl.findOne(query);
+
+  console.log(result);
+
+  return result;
 };
 
-export const createUrl = (data: UrlShortenerReq) => {
-  const existingUrl = findOneShortenedUrl({ originalUrl: data.url });
+export const createUrl = async (data: UrlShortenerReq) => {
+  const existingUrl = await ShortenedUrl.findOne({
+    $or: [{ originalUrl: data.url }, {}],
+  }).sort({ shortUrl: -1 });
 
-  if (existingUrl) return existingUrl;
+  if (existingUrl?.originalUrl === data.url) return existingUrl;
 
-  return createShortenedUrl({ originalUrl: data.url });
+  return ShortenedUrl.create({
+    originalUrl: data.url,
+    shortUrl: existingUrl?.shortUrl ? existingUrl.shortUrl + 1 : 1,
+  });
 };
 
 export const dnsLookup = async (hostname: string) => {

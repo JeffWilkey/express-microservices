@@ -17,7 +17,7 @@ afterEach(async () => {
   await mongoose.connection.close();
 });
 
-describe("URL Shortener Microservice API", () => {
+describe("URL Shortener Microservice", () => {
   test("POST / should return a response with correct properties", async () => {
     const req = {
       url: "freecodecamp.org",

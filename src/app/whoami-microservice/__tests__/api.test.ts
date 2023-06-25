@@ -5,7 +5,7 @@ import api from "../api";
 const app = express();
 app.use("/", api);
 
-describe("WhoAmI Microservice API", () => {
+describe("WhoAmI Microservice", () => {
   test("GET / should return a correctly formatted response", async () => {
     const headers = {
       "Accept-Language": "en-US,en;q=0.5",

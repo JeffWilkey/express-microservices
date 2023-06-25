@@ -5,7 +5,7 @@ import api from "../api";
 const app = express();
 app.use("/", api);
 
-describe("Timestamp Microservice API", () => {
+describe("Timestamp Microservice", () => {
   test("GET /:date should return a correctly formatted timestamp", async () => {
     const res = await request(app).get("/2023-01-01");
     expect(res.status).toBe(200);

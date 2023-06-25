@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getTimestamp } from "./services";
+import { getTimestamp } from "./service";
 
 const api = Router();
 
